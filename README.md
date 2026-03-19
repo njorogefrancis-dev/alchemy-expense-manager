@@ -1,11 +1,11 @@
-# 💰 Alchemy — Expense Report Generator
+#  Alchemy — Expense Report Generator
 
 A full-stack personal finance web app built with Flask, SQLite, and Bootstrap 5.
 Created by **Francis Njoroge** — njorogefrancis.dev@gmail.com
 
 ---
 
-## 🚀 Quick Start
+##  Quick Start
 
 ```bash
 # 1. Unzip and enter the project
@@ -28,22 +28,22 @@ Create your account and start tracking immediately. No demo data, no setup scrip
 
 ---
 
-## ✨ Features
+##  Features
 
-### 🔐 Authentication
+###  Authentication
 - Register, login, logout
 - bcrypt password hashing
 - Session management (8-hour sessions)
 - Profile page — update username, email, or password
 
-### 💸 Expense Management
+###  Expense Management
 - Add, edit, delete expenses
 - Fields: date, category, description, amount (KSh)
 - Filter by category, sort by date or amount
 - Paginated list view (15 per page)
 - **Quick Add** panel directly on the dashboard
 
-### 📥 Import & Export
+###  Import & Export
 - **Import CSV** — bulk upload expenses from a spreadsheet
   - Drag & drop or file picker
   - Accepts: `date, category, description, amount` columns
@@ -52,13 +52,13 @@ Create your account and start tracking immediately. No demo data, no setup scrip
   - Download a sample CSV template from the import page
 - **Export CSV** — download filtered expenses from the Reports page
 
-### 🎯 Budgets
+###  Budgets
 - Set monthly spending limits per category
 - Visual progress bars (green → yellow → red)
 - Over-budget and near-limit alerts on the dashboard
 - Navigate between months with arrow controls
 
-### 📊 Dashboard
+###  Dashboard
 - Greeting based on time of day
 - 4 KPI cards: Total Spent, This Month, Entries, Avg Expense
 - Monthly bar chart (Chart.js)
@@ -67,7 +67,7 @@ Create your account and start tracking immediately. No demo data, no setup scrip
 - Recent 10 transactions
 - Quick Add form
 
-### 📈 Analytics
+###  Analytics
 - 12-month spending trend line chart
 - Day-of-week spending heatmap
 - 30-day cumulative spending curve
@@ -76,7 +76,7 @@ Create your account and start tracking immediately. No demo data, no setup scrip
 - Week-over-week % change
 - Spending streak (consecutive days with activity)
 
-### 📋 Reports
+###  Reports
 - Filter by custom date range
 - Quick presets: This Month, Last Month, Last 90 Days, This Year
 - Summary stats: total, count, average, highest expense
@@ -84,13 +84,13 @@ Create your account and start tracking immediately. No demo data, no setup scrip
 - Full transaction table
 - Export to CSV
 
-### 🌙 Dark Mode
+###  Dark Mode
 - Toggle in the top navbar
 - Preference saved in browser (localStorage)
 
 ---
 
-## 🗂 Project Structure
+##  Project Structure
 
 ```
 expense_app/
@@ -120,7 +120,7 @@ expense_app/
 
 ---
 
-## 🗃 Database Schema
+##  Database Schema
 
 ```
 users
@@ -147,7 +147,7 @@ Entertainment, Shopping, Education, Travel, Personal Care, Miscellaneous
 
 ---
 
-## 📥 CSV Import Format
+##  CSV Import Format
 
 Your CSV file must include these 4 columns (header row required, column order doesn't matter):
 
@@ -165,7 +165,7 @@ Your CSV file must include these 4 columns (header row required, column order do
 
 ---
 
-## 🔒 Security
+##  Security
 
 | Measure | Implementation |
 |---|---|
@@ -195,7 +195,7 @@ export FLASK_ENV="production"
 
 ---
 
-## 📦 Dependencies
+##  Dependencies
 
 | Package | Version | Purpose |
 |---|---|---|
