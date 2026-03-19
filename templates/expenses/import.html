@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+{% block title %}Import Expenses{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-9">
+
+      <!-- Breadcrumb -->
+      <nav class="mb-3">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{{ url_for('expenses.list_expenses') }}">Expenses</a></li>
+          <li class="breadcrumb-item active">Import CSV</li>
+        </ol>
+      </nav>
+
+      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+          <h1 class="page-title mb-1">
+            <i class="bi bi-upload me-2 text-primary"></i>Import Expenses
+          </h1>
+          <p class="text-muted mb-0">Upload a CSV file to bulk-import your expenses</p>
+        </div>
+        <!-- Download sample CSV -->
+        <a href="{{ url_for('expenses.sample_csv') }}" class="btn btn-outline-success">
+          <i class="bi bi-file-earmark-arrow-down me-1"></i>Download Sample CSV
+        </a>
+      </div>
+
+      <div class="row g-4">
+
+        <!-- ── Upload Form ───────────────────────────────────────────────── -->
+        <div class="col-12 col-md-7">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+
+              <form method="POST" enctype="multipart/form-data" id="importForm">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <!-- Drag & drop zone -->
+                <div class="drop-zone mb-4" id="dropZone">
+                  <div class="drop-zone-inner text-center">
+                    <i class="bi bi-file-earmark-spreadsheet drop-icon"></i>
+                    <p class="fw-semibold mb-1 mt-2">Drag & drop your CSV here</p>
+                    <p class="text-muted small mb-3">or click to browse</p>
+                    <input type="file" name="csv_file" id="csvFile"
+                           accept=".csv" class="d-none" required>
+                    <button type="button" class="btn btn-outline-primary btn-sm"
+                            onclick="document.getElementById('csvFile').click()">
+                      <i class="bi bi-folder2-open me-1"></i>Browse File
+                    </button>
+                  </div>
+                  <!-- File selected indicator -->
+                  <div class="selected-file d-none mt-3 p-2 rounded bg-success-subtle text-success text-center" id="fileLabel">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <span id="fileName"></span>
+                  </div>
+                </div>
+
+                <!-- Options -->
+                <div class="mb-4">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="autoCreateCats"
+                           name="auto_create_cats" checked>
+                    <label class="form-check-label" for="autoCreateCats">
+                      Auto-create new categories found in the file
+                    </label>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100" id="importBtn" disabled>
+                  <i class="bi bi-upload me-2"></i>Import Expenses
+                </button>
+              </form>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Instructions ──────────────────────────────────────────────── -->
+        <div class="col-12 col-md-5">
+
+          <!-- Format rules -->
+          <div class="card border-0 shadow-sm mb-3">
+            <div class="card-header bg-transparent border-0 pt-3 pb-0">
+              <h6 class="fw-semibold mb-0">
+                <i class="bi bi-info-circle me-2 text-primary"></i>CSV Format Rules
+              </h6>
+            </div>
+            <div class="card-body pt-2">
+              <p class="small text-muted mb-2">Your CSV must have these 4 columns (header row required):</p>
+
+              <div class="import-col-badge mb-1"><code>date</code> <span class="text-muted">— YYYY-MM-DD or DD/MM/YYYY</span></div>
+              <div class="import-col-badge mb-1"><code>category</code> <span class="text-muted">— e.g. Food & Dining</span></div>
+              <div class="import-col-badge mb-1"><code>description</code> <span class="text-muted">— what was the expense</span></div>
+              <div class="import-col-badge mb-3"><code>amount</code> <span class="text-muted">— plain number, e.g. 1500.00</span></div>
+
+              <div class="alert alert-info py-2 px-3 small mb-0">
+                <i class="bi bi-lightbulb-fill me-1"></i>
+                Column order doesn't matter. Extra columns are ignored.
+                Unknown categories are created automatically.
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview of sample -->
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-transparent border-0 pt-3 pb-0">
+              <h6 class="fw-semibold mb-0">
+                <i class="bi bi-table me-2 text-primary"></i>Sample Format
+              </h6>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-sm mb-0 small">
+                  <thead class="table-light">
+                    <tr>
+                      <th class="ps-3">date</th>
+                      <th>category</th>
+                      <th>description</th>
+                      <th class="pe-3">amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="ps-3">2025-03-01</td>
+                      <td>Food & Dining</td>
+                      <td>Naivas groceries</td>
+                      <td class="pe-3">3850</td>
+                    </tr>
+                    <tr>
+                      <td class="ps-3">2025-03-05</td>
+                      <td>Transport</td>
+                      <td>Uber to airport</td>
+                      <td class="pe-3">1800</td>
+                    </tr>
+                    <tr>
+                      <td class="ps-3">2025-03-10</td>
+                      <td>Housing & Utilities</td>
+                      <td>KPLC bill</td>
+                      <td class="pe-3">2300</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const dropZone  = document.getElementById('dropZone');
+const fileInput = document.getElementById('csvFile');
+const fileLabel = document.getElementById('fileLabel');
+const fileName  = document.getElementById('fileName');
+const importBtn = document.getElementById('importBtn');
+
+function handleFile(file) {
+  if (!file) return;
+  if (!file.name.endsWith('.csv')) {
+    alert('Please select a .csv file.');
+    return;
+  }
+  fileName.textContent = file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
+  fileLabel.classList.remove('d-none');
+  importBtn.disabled = false;
+  importBtn.innerHTML = '<i class="bi bi-upload me-2"></i>Import "' + file.name + '"';
+}
+
+// File input change
+fileInput.addEventListener('change', () => handleFile(fileInput.files[0]));
+
+// Drag & drop
+dropZone.addEventListener('dragover', e => {
+  e.preventDefault();
+  dropZone.classList.add('drag-over');
+});
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  fileInput.files = e.dataTransfer.files;   // assign to input
+  handleFile(file);
+});
+
+// Click on drop zone → open picker
+dropZone.addEventListener('click', e => {
+  if (e.target.tagName !== 'BUTTON' && e.target.tagName !== 'INPUT') {
+    fileInput.click();
+  }
+});
+
+// Loading state on submit
+document.getElementById('importForm').addEventListener('submit', function() {
+  importBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Importing…';
+  importBtn.disabled = true;
+});
+</script>
+{% endblock %}

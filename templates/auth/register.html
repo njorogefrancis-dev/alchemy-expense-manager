@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}Create Account{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper d-flex align-items-center justify-content-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-sm-9 col-md-7 col-lg-5">
+
+        <div class="auth-card card shadow-lg border-0">
+          <div class="card-body p-4 p-md-5">
+
+            <div class="text-center mb-4">
+              <div class="auth-logo mb-3">
+                <i class="bi bi-graph-up-arrow"></i>
+              </div>
+              <h2 class="fw-bold">Create account</h2>
+              <p class="text-muted">Track smarter with Alchemy</p>
+            </div>
+
+            <form method="POST" action="{{ url_for('auth.register') }}" novalidate>
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+              <!-- Username -->
+              <div class="mb-3">
+                <label for="username" class="form-label fw-medium">Username</label>
+                <div class="input-group input-flat">
+                  <span class="input-group-text"><i class="bi bi-at"></i></span>
+                  <input type="text" id="username" name="username"
+                         class="form-control"
+                         placeholder=""
+                         value="{{ username or '' }}"
+                         minlength="3" maxlength="80"
+                         autocomplete="username" required autofocus>
+                </div>
+                <div class="form-text">At least 3 characters.</div>
+              </div>
+
+              <!-- Email -->
+              <div class="mb-3">
+                <label for="email" class="form-label fw-medium">Email</label>
+                <div class="input-group input-flat">
+                  <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                  <input type="email" id="email" name="email"
+                         class="form-control"
+                         placeholder=""
+                         value="{{ email or '' }}"
+                         autocomplete="email" required>
+                </div>
+              </div>
+
+              <!-- Password -->
+              <div class="mb-3">
+                <label for="password" class="form-label fw-medium">Password</label>
+                <div class="input-group input-flat">
+                  <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                  <input type="password" id="password" name="password"
+                         class="form-control"
+                         placeholder=""
+                         minlength="8"
+                         autocomplete="new-password" required>
+                  <button class="btn btn-icon-flat" type="button"
+                          onclick="togglePassword('password', this)">
+                    <i class="bi bi-eye"></i>
+                  </button>
+                </div>
+                <div class="mt-2">
+                  <div class="progress" style="height:4px;">
+                    <div class="progress-bar" id="pwdStrengthBar" style="width:0%;"></div>
+                  </div>
+                  <div class="form-text" id="pwdStrengthText">Enter a password (min 8 chars)</div>
+                </div>
+              </div>
+
+              <!-- Confirm Password -->
+              <div class="mb-4">
+                <label for="confirm_password" class="form-label fw-medium">Confirm Password</label>
+                <div class="input-group input-flat">
+                  <span class="input-group-text"><i class="bi bi-shield-check"></i></span>
+                  <input type="password" id="confirm_password" name="confirm_password"
+                         class="form-control"
+                         placeholder=""
+                         autocomplete="new-password" required>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-lg w-100">
+                <i class="bi bi-person-plus me-2"></i>Create Account
+              </button>
+            </form>
+
+            <hr class="my-4">
+            <p class="text-center mb-0 text-muted">
+              Already have an account?
+              <a href="{{ url_for('auth.login') }}" class="text-primary fw-medium">Sign in</a>
+            </p>
+
+          </div>
+        </div>
+
+        <!-- Watermark -->
+        <p class="text-center text-muted small mt-3">
+          Created by <strong>Francis Njoroge</strong> &mdash;
+          <a href="mailto:njorogefrancis.dev@gmail.com" class="text-muted">njorogefrancis.dev@gmail.com</a>
+        </p>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

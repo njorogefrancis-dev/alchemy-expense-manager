@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block title %}{{ action }} Expense{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-9 col-lg-7">
+
+      <!-- Breadcrumb -->
+      <nav class="mb-3">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{{ url_for('expenses.list_expenses') }}">Expenses</a></li>
+          <li class="breadcrumb-item active">{{ action }} Expense</li>
+        </ol>
+      </nav>
+
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0">
+          <h4 class="fw-bold mb-0">
+            <i class="bi bi-{% if action == 'Add' %}plus-circle{% else %}pencil-square{% endif %} me-2 text-primary"></i>
+            {{ action }} Expense
+          </h4>
+        </div>
+        <div class="card-body p-4">
+
+          <form method="POST"
+                action="{% if expense %}{{ url_for('expenses.edit', expense_id=expense.id) }}{% else %}{{ url_for('expenses.add') }}{% endif %}"
+                novalidate>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <!-- Date -->
+            <div class="mb-3">
+              <label for="date" class="form-label fw-medium">Date <span class="text-danger">*</span></label>
+              <input type="date" id="date" name="date"
+                     class="form-control"
+                     value="{{ form.date if form else '' }}"
+                     max="{{ today_str }}"
+                     required>
+            </div>
+
+            <!-- Category -->
+            <div class="mb-3">
+              <label for="category_id" class="form-label fw-medium">
+                Category <span class="text-danger">*</span>
+              </label>
+              <div class="d-flex gap-2">
+                <select id="category_id" name="category_id" class="form-select" required>
+                  <option value="">Select a category…</option>
+                  {% for c in categories %}
+                  <option value="{{ c.id }}"
+                    {% if form and form.category_id == c.id|string %}selected{% endif %}>
+                    {{ c.name }}
+                  </option>
+                  {% endfor %}
+                </select>
+                <a href="{{ url_for('expenses.categories') }}"
+                   class="btn btn-outline-secondary" title="Manage categories">
+                  <i class="bi bi-tags"></i>
+                </a>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+              <label for="description" class="form-label fw-medium">
+                Description <span class="text-danger">*</span>
+              </label>
+              <input type="text" id="description" name="description"
+                     class="form-control"
+                     placeholder="e.g. Lunch at Café Bleu"
+                     value="{{ form.description if form else '' }}"
+                     maxlength="255" required>
+              <div class="form-text text-end">
+                <span id="descCount">0</span>/255
+              </div>
+            </div>
+
+            <!-- Amount -->
+            <div class="mb-4">
+              <label for="amount" class="form-label fw-medium">
+                Amount (KSh) <span class="text-danger">*</span>
+              </label>
+              <div class="input-group">
+                <span class="input-group-text fw-bold">KSh</span>
+                <input type="number" id="amount" name="amount"
+                       class="form-control"
+                       placeholder="0.00"
+                       value="{{ form.amount if form else '' }}"
+                       min="0.01" step="0.01" required>
+              </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary px-4">
+                <i class="bi bi-check-lg me-1"></i>
+                {{ 'Save Changes' if action == 'Edit' else 'Add Expense' }}
+              </button>
+              <a href="{{ url_for('expenses.list_expenses') }}" class="btn btn-outline-secondary">
+                Cancel
+              </a>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Character counter for description
+const descInput = document.getElementById('description');
+const descCount = document.getElementById('descCount');
+function updateCount() {
+  descCount.textContent = descInput.value.length;
+}
+descInput.addEventListener('input', updateCount);
+updateCount();
+
+// Set max date to today
+document.getElementById('date').max = new Date().toISOString().split('T')[0];
+</script>
+{% endblock %}
